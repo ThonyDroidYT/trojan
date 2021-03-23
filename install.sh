@@ -23,6 +23,7 @@ SERVICE_URL="https://raw.githubusercontent.com/Jrohy/trojan/master/asset/trojan-
 [[ -z $(echo $SHELL|grep zsh) ]] && SHELL_WAY="bash" || SHELL_WAY="zsh"
 
 #######color code########
+WHITE="0m"
 RED="31m"
 GREEN="32m"
 YELLOW="33m"
@@ -38,7 +39,8 @@ colorEcho(){
     [[ -e "/etc/newadm/idioma" ]] && id=$(cat /etc/newadm/idioma) || id=es
     COLOR=$1
     #echo -e "\033[${COLOR}${@:2}\033[0m"
-    echo -e "\033[${COLOR}$(source trans -e bing -b zh:${id} "${@:2}")\033[0m"
+    #echo -e "\033[${COLOR}$(source trans -e bing -b zh:${id} "${@:2}")\033[0m"
+    echo -e "\033[${COLOR}$(source trans -b zh:${id} "${@:2}")\033[0m"
 }
 
 #######get params#########
@@ -153,7 +155,7 @@ installTrojan(){
         rm -f /usr/local/bin/trojan
     fi
     LASTEST_VERSION=$(curl -H 'Cache-Control: no-cache' -s "$VERSION_CHECK" | grep 'tag_name' | cut -d\" -f4)
-    echo "正在下载管理程序`colorEcho $BLUE $LASTEST_VERSION`版本..."
+    echo "$(source trans -b es:${id} "正在下载管理程序")`colorEcho $BLUE $LASTEST_VERSION`$(source trans -b es:${id} "版本...")"
     curl -L "$DOWNLAOD_URL/$LASTEST_VERSION/trojan" -o /usr/local/bin/trojan
     chmod +x /usr/local/bin/trojan
     if [[ ! -e /etc/systemd/system/trojan-web.service ]];then
@@ -188,7 +190,8 @@ installTrojan(){
 main(){
     [[ ${HELP} == 1 ]] && help && return
     [[ ${REMOVE} == 1 ]] && removeTrojan && return
-    [[ $UPDATE == 0 ]] && echo "正在安装trojan管理程序.." || echo "正在更新trojan管理程序.."
+    #[[ $UPDATE == 0 ]] && echo "正在安装trojan管理程序.." || echo "正在更新trojan管理程序.."
+    [[ $UPDATE == 0 ]] && colorEcho ${WHITE} "正在安装trojan管理程序.." || colorEcho ${WHITE} "正在更新trojan管理程序.."
     checkSys
     [[ $UPDATE == 0 ]] && installDependent
     installTrojan
