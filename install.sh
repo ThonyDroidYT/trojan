@@ -29,9 +29,15 @@ YELLOW="33m"
 BLUE="36m"
 FUCHSIA="35m"
 
-colorEcho(){
+colorEcho2(){
     COLOR=$1
     echo -e "\033[${COLOR}${@:2}\033[0m"
+}
+#Translate
+colorEcho2(){
+    COLOR=$1
+    #echo -e "\033[${COLOR}${@:2}\033[0m"
+    echo -e "\033[${COLOR}$(source trans -e bing -b zh:es "${@:2}")\033[0m"
 }
 
 #######get params#########
