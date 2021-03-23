@@ -34,7 +34,8 @@ colorEcho2(){
     echo -e "\033[${COLOR}${@:2}\033[0m"
 }
 #Translate
-colorEcho2(){
+colorEcho(){
+    [[ -e "/etc/newadm/idioma" ]] && id=$(cat /etc/newadm/idioma) || id=es
     COLOR=$1
     #echo -e "\033[${COLOR}${@:2}\033[0m"
     echo -e "\033[${COLOR}$(source trans -e bing -b zh:es "${@:2}")\033[0m"
