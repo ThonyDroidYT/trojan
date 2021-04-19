@@ -149,7 +149,7 @@ func InstallMysql() {
 		util.ExecCommand(fmt.Sprintf(dbDockerRun, mysql.ServerPort, mysql.Password))
 		db := mysql.GetDB()
 		for {
-			fmt.Printf("%s mariadb启动中,请稍等...\n", time.Now().Format("2006-01-02 15:04:05"))
+			fmt.Printf("%s mariadb está comenzando, por favor espere...\n", time.Now().Format("2006-01-02 15:04:05"))
 			err := db.Ping()
 			if err == nil {
 				db.Close()
@@ -158,35 +158,35 @@ func InstallMysql() {
 				time.Sleep(2 * time.Second)
 			}
 		}
-		fmt.Println("mariadb启动成功!")
+		fmt.Println("mariadb comenzó con éxito!")
 	} else if choice == 2 {
 		mysql = core.Mysql{}
 		for {
 			for {
-				mysqlUrl := util.Input("请输入mysql连接地址(格式: host:port), 默认连接地址为127.0.0.1:3306, 使用直接回车, 否则输入自定义连接地址: ",
+				mysqlUrl := util.Input("Ingrese la dirección de conexión de mysql (formato: host:port), La dirección de conexión predeterminada es 127.0.0.1:3306, Usar retorno directo, De lo contrario, ingrese una dirección de conexión personalizada: ",
 					"127.0.0.1:3306")
 				urlInfo := strings.Split(mysqlUrl, ":")
 				if len(urlInfo) != 2 {
-					fmt.Printf("输入的%s不符合匹配格式(host:port)\n", mysqlUrl)
+					fmt.Printf("El %s ingresado no coincide con el formato coincidente(host:port)\n", mysqlUrl)
 					continue
 				}
 				port, err := strconv.Atoi(urlInfo[1])
 				if err != nil {
-					fmt.Printf("%s不是数字\n", urlInfo[1])
+					fmt.Printf("%s No un número\n", urlInfo[1])
 					continue
 				}
 				mysql.ServerAddr, mysql.ServerPort = urlInfo[0], port
 				break
 			}
-			mysql.Username = util.Input("请输入mysql的用户名(回车使用root): ", "root")
-			mysql.Password = util.Input(fmt.Sprintf("请输入mysql %s用户的密码: ", mysql.Username), "")
+			mysql.Username = util.Input("Ingrese el nombre de usuario de mysql (ingrese para usar root): ", "root")
+			mysql.Password = util.Input(fmt.Sprintf("Ingrese la contraseña del usuario mysql %s: ", mysql.Username), "")
 			db := mysql.GetDB()
 			if db != nil && db.Ping() == nil {
-				mysql.Database = util.Input("请输入使用的数据库名(不存在可自动创建, 回车使用trojan): ", "trojan")
+				mysql.Database = util.Input("Introduzca el nombre de la base de datos utilizada (se puede crear automáticamente si no existe, Ingrese para usar trojan): ", "trojan")
 				db.Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s;", mysql.Database))
 				break
 			} else {
-				fmt.Println("连接mysql失败, 请重新输入")
+				fmt.Println("No se pudo conectar a mysql, vuelva a ingresar")
 			}
 		}
 	}
