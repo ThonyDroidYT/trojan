@@ -57,7 +57,7 @@ Configurar el inicio automático: `systemctl enable trojan-web`
 
 Programa de gestión de actualizaciones: `source <(curl -sL https://git.io/trojan-install)`
 
-## Ejecutar captura de pantalla
+## Captura de pantalla de Ejecución
 ![avatar](asset/1.png)
 ![avatar](asset/2.png)
 
