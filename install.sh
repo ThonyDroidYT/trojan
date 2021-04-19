@@ -58,7 +58,7 @@ done
 help(){
     echo "bash $0 [-h|--help] [--remove]"
     echo "  -h, --help           Mostrar ayuda"
-    echo "      --remove        Remover trojan"
+    echo "      --remove         Remover trojan"
     return 0
 }
 
