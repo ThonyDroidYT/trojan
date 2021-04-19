@@ -184,7 +184,7 @@ installTrojan(){
 main(){
     [[ ${HELP} == 1 ]] && help && return
     [[ ${REMOVE} == 1 ]] && removeTrojan && return
-    [[ $UPDATE == 0 ]] && echo "Se está instalando el programa de administración de trojan." || echo "Se está actualizando el programa de gestión de trojan."
+    [[ $UPDATE == 0 ]] && echo -e "\033[1;32mSe está instalando el programa de administración de trojan.\033[0m" || echo -e "\033[1;33mSe está actualizando el programa de gestión de trojan.\033[0m"
     checkSys
     [[ $UPDATE == 0 ]] && installDependent
     installTrojan
