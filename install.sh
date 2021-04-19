@@ -166,7 +166,7 @@ installTrojan(){
     source ~/.${SHELL_WAY}rc
     if [[ $UPDATE == 0 ]];then
         colorEcho $GREEN "¡Programa de administración de trojan instalado éxito!\n"
-        echo -e "Ejecutar comando`colorEcho $BLUE trojan`para administrar trojan\n"
+        echo -e "Ejecute comando `colorEcho $BLUE trojan` para administrar trojan\n\n "
         /usr/local/bin/trojan
     else
         if [[ `cat /usr/local/etc/trojan/config.json|grep -w "\"db\""` ]];then
