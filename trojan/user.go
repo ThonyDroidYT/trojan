@@ -9,11 +9,11 @@ import (
 	"trojan/util"
 )
 
-// UserMenu 用户管理菜单
+// UserMenu Menú de gestión de usuarios
 func UserMenu() {
 	fmt.Println()
-	menu := []string{"新增用户", "删除用户", "限制流量", "清空流量", "设置限期", "取消限期"}
-	switch util.LoopInput("请选择: ", menu, false) {
+	menu := []string{"Crear usuario", "Eliminar usuarios", "Limitar el tráfico", "Tráfico vacío", "Establecer fecha límite", "Cancelar fecha límite"}
+	switch util.LoopInput("Por favor elige: 》", menu, false) {
 	case 1:
 		AddUser()
 	case 2:
@@ -29,45 +29,45 @@ func UserMenu() {
 	}
 }
 
-// AddUser 添加用户
+// AddUser Agregar usuario
 func AddUser() {
 	randomUser := util.RandString(4)
 	randomPass := util.RandString(8)
-	inputUser := util.Input(fmt.Sprintf("生成随机用户名: %s, 使用直接回车, 否则输入自定义用户名: ", randomUser), randomUser)
+	inputUser := util.Input(fmt.Sprintf("Generar nombre de usuario aleatorio: %s, Usar retorno directo, De lo contrario, ingrese un nombre de usuario personalizado: ", randomUser), randomUser)
 	if inputUser == "admin" {
-		fmt.Println(util.Yellow("不能新建用户名为'admin'的用户!"))
+		fmt.Println(util.Yellow("No se puede crear un nuevo nombre de usuario.'admin'Usuario!"))
 		return
 	}
 	mysql := core.GetMysql()
 	if user := mysql.GetUserByName(inputUser); user != nil {
-		fmt.Println(util.Yellow("已存在用户名为: " + inputUser + " 的用户!"))
+		fmt.Println(util.Yellow("Nombre de usuario existente: " + inputUser + " ¡Usuario!"))
 		return
 	}
-	inputPass := util.Input(fmt.Sprintf("生成随机密码: %s, 使用直接回车, 否则输入自定义密码: ", randomPass), randomPass)
+	inputPass := util.Input(fmt.Sprintf("Generar contraseña aleatoria: %s, Usar retorno directo, De lo contrario, ingrese una contraseña personalizada: ", randomPass), randomPass)
 	base64Pass := base64.StdEncoding.EncodeToString([]byte(inputPass))
 	if user := mysql.GetUserByPass(base64Pass); user != nil {
-		fmt.Println(util.Yellow("已存在密码为: " + inputPass + " 的用户!"))
+		fmt.Println(util.Yellow("La contraseña existente es: " + inputPass + " ¡Usuario!"))
 		return
 	}
 	if mysql.CreateUser(inputUser, base64Pass, inputPass) == nil {
-		fmt.Println("新增用户成功!")
+		fmt.Println("Usuario agregado exitosamente!")
 	}
 }
 
-// DelUser 删除用户
+// DelUser eliminar usuarios
 func DelUser() {
 	userList := UserList()
 	mysql := core.GetMysql()
-	choice := util.LoopInput("请选择要删除的用户序号: ", userList, true)
+	choice := util.LoopInput("Seleccione el número de serie del usuario que desea eliminar: 》", userList, true)
 	if choice == -1 {
 		return
 	}
 	if mysql.DeleteUser(userList[choice-1].ID) == nil {
-		fmt.Println("删除用户成功!")
+		fmt.Println("Usuario eliminado correctamente!")
 	}
 }
 
-// SetUserQuota 限制用户流量
+// SetUserQuota Limita el tráfico de usuarios
 func SetUserQuota() {
 	var (
 		limit int
@@ -75,89 +75,89 @@ func SetUserQuota() {
 	)
 	userList := UserList()
 	mysql := core.GetMysql()
-	choice := util.LoopInput("请选择要限制流量的用户序号: ", userList, true)
+	choice := util.LoopInput("Seleccione el número de serie del usuario cuyo tráfico se restringirá: ", userList, true)
 	if choice == -1 {
 		return
 	}
 	for {
-		quota := util.Input("请输入用户"+userList[choice-1].Username+"限制的流量大小(单位byte)", "")
+		quota := util.Input("Por favor ingrese usuario"+userList[choice-1].Username+"Tamaño de tráfico restringido (byte unitario)", "")
 		limit, err = strconv.Atoi(quota)
 		if err != nil {
-			fmt.Printf("%s 不是数字, 请重新输入!\n", quota)
+			fmt.Printf("%s No un número, por favor ingrese de nuevo!\n", quota)
 		} else {
 			break
 		}
 	}
 	if mysql.SetQuota(userList[choice-1].ID, limit) == nil {
-		fmt.Println("成功设置用户" + userList[choice-1].Username + "限制流量" + util.Bytefmt(uint64(limit)))
+		fmt.Println("Usuario configurado correctamente" + userList[choice-1].Username + "Limitar el tráfico" + util.Bytefmt(uint64(limit)))
 	}
 }
 
-// CleanData 清空用户流量
+// CleanData Tráfico de usuarios claro
 func CleanData() {
 	userList := UserList()
 	mysql := core.GetMysql()
-	choice := util.LoopInput("请选择要清空流量的用户序号: ", userList, true)
+	choice := util.LoopInput("Seleccione el número de serie del usuario para borrar el tráfico: ", userList, true)
 	if choice == -1 {
 		return
 	}
 	if mysql.CleanData(userList[choice-1].ID) == nil {
-		fmt.Println("清空流量成功!")
+		fmt.Println("Tráfico vaciado correctamente!")
 	}
 }
 
-// CancelExpire 取消限期
+// CancelExpire Cancelar de fecha límite
 func CancelExpire() {
 	userList := UserList()
 	mysql := core.GetMysql()
-	choice := util.LoopInput("请选择要取消限期的用户序号: ", userList, true)
+	choice := util.LoopInput("Seleccione el número de serie del usuario para cancelar la fecha límite: ", userList, true)
 	if choice == -1 {
 		return
 	}
 	if userList[choice-1].UseDays == 0 {
-		fmt.Println(util.Yellow("选择的用户未设置限期!"))
+		fmt.Println(util.Yellow("¡El usuario seleccionado no ha establecido una fecha límite!"))
 		return
 	}
 	if mysql.CancelExpire(userList[choice-1].ID) == nil {
-		fmt.Println("取消限期成功!")
+		fmt.Println("¡Fecha límite cancelado con éxito!")
 	}
 }
 
-// SetupExpire 设置限期
+// SetupExpire Establecer fecha límite
 func SetupExpire() {
 	userList := UserList()
 	mysql := core.GetMysql()
-	choice := util.LoopInput("请选择要设置限期的用户序号: ", userList, true)
+	choice := util.LoopInput("Seleccione el número de serie del usuario para establecer una fecha límite: ", userList, true)
 	if choice == -1 {
 		return
 	}
-	useDayStr := util.Input("请输入要限制使用的天数: ", "")
+	useDayStr := util.Input("Ingrese la cantidad de días que se restringirán: ", "")
 	if useDayStr == "" {
 		return
 	} else if strings.Contains(useDayStr, "-") {
-		fmt.Println(util.Yellow("天数不能为负数"))
+		fmt.Println(util.Yellow("El número de días no puede ser negativo."))
 		return
 	} else if !util.IsInteger(useDayStr) {
-		fmt.Println(util.Yellow("输入为非整数!"))
+		fmt.Println(util.Yellow("¡La entrada no es un número entero!"))
 		return
 	}
 	useDays, _ := strconv.Atoi(useDayStr)
 	if mysql.SetExpire(userList[choice-1].ID, uint(useDays)) == nil {
-		fmt.Println("设置限期成功!")
+		fmt.Println("Fecha límite establecida con éxito!")
 	}
 }
 
-// CleanDataByName 清空指定用户流量
+// CleanDataByName Borrar el tráfico de usuario especifico
 func CleanDataByName(usernames []string) {
 	mysql := core.GetMysql()
 	if err := mysql.CleanDataByName(usernames); err != nil {
 		fmt.Println(err.Error())
 	} else {
-		fmt.Println("清空流量成功!")
+		fmt.Println("¡Vaciar el tráfico con éxito!")
 	}
 }
 
-// UserList 获取用户列表并打印显示
+// UserList Pegue a lista de usuários e imprima-a
 func UserList(ids ...string) []*core.User {
 	mysql := core.GetMysql()
 	userList, err := mysql.GetData(ids...)
@@ -172,21 +172,21 @@ func UserList(ids ...string) []*core.User {
 			pass = []byte("")
 		}
 		fmt.Printf("%d.\n", i+1)
-		fmt.Println("用户名: " + k.Username)
-		fmt.Println("密码: " + string(pass))
-		fmt.Println("上传流量: " + util.Cyan(util.Bytefmt(k.Upload)))
-		fmt.Println("下载流量: " + util.Cyan(util.Bytefmt(k.Download)))
+		fmt.Println("Nombre de usuario: 》" + k.Username)
+		fmt.Println("Contraseña: 》" + string(pass))
+		fmt.Println("Tráfico de subida: 》" + util.Cyan(util.Bytefmt(k.Upload)))
+		fmt.Println("Tráfico de descarga: 》" + util.Cyan(util.Bytefmt(k.Download)))
 		if k.Quota < 0 {
-			fmt.Println("流量限额: " + util.Cyan("无限制"))
+			fmt.Println("Límite de flujo: 》" + util.Cyan("Ilimitado"))
 		} else {
-			fmt.Println("流量限额: " + util.Cyan(util.Bytefmt(uint64(k.Quota))))
+			fmt.Println("Límite de flujo: 》" + util.Cyan(util.Bytefmt(uint64(k.Quota))))
 		}
 		if k.UseDays == 0 {
-			fmt.Println("到期日期: " + util.Cyan("无限制"))
+			fmt.Println("Fecha de expiración: 》" + util.Cyan("Ilimitado"))
 		} else {
-			fmt.Println("到期日期: " + util.Cyan(k.ExpiryDate))
+			fmt.Println("Fecha de expiración: 》" + util.Cyan(k.ExpiryDate))
 		}
-		fmt.Println("分享链接: " + util.Green(fmt.Sprintf("trojan://%s@%s:%d", string(pass), domain, port)))
+		fmt.Println("Compartir enlace: 》" + util.Green(fmt.Sprintf("trojan://%s@%s:%d", string(pass), domain, port)))
 		fmt.Println()
 	}
 	return userList
