@@ -18,12 +18,12 @@ function prompt() {
 }
 
 if [[ $(id -u) != 0 ]]; then
-    echo Please run this script as root.
+    echo Ejecute este script como root.
     exit 1
 fi
 
 if [[ $(uname -m 2> /dev/null) != x86_64 ]]; then
-    echo Please run this script on x86_64 machine.
+    echo Ejecute este script en una máquina x86_64.
     exit 1
 fi
 
@@ -50,13 +50,13 @@ BINARYPATH="$INSTALLPREFIX/$NAME"
 CONFIGPATH="/usr/local/etc/$NAME/config.json"
 SYSTEMDPATH="$SYSTEMDPREFIX/$NAME.service"
 
-echo Creating $NAME install directory
+echo Creando el directorio de instalación de $NAME
 mkdir -p $INSTALLPREFIX
 
-echo Entering temp directory $TMPDIR...
+echo Ingresando al directorio temporal $TMPDIR...
 cd "$TMPDIR"
 
-echo Downloading $NAME $VERSION...
+echo Descargando $NAME $VERSION...
 curl -LO --progress-bar "$DOWNLOADURL" || wget -q --show-progress "$DOWNLOADURL"
 
 echo Unpacking $NAME $VERSION...
@@ -77,22 +77,22 @@ else
     mv trojan-go trojan
 fi
 
-echo Installing $NAME $VERSION to $BINARYPATH...
+echo Instalando $NAME $VERSION a $BINARYPATH...
 install -Dm755 "$NAME" "$BINARYPATH"
 
-echo Installing $NAME server config to $CONFIGPATH...
-if ! [[ -f "$CONFIGPATH" ]] || prompt "The server config already exists in $CONFIGPATH, overwrite?"; then
+echo Instalando $NAME server config a $CONFIGPATH...
+if ! [[ -f "$CONFIGPATH" ]] || prompt "La configuración del servidor ya existe en $CONFIGPATH, Sobrescribir?"; then
     if [[ $TYPE == 0 ]];then
         install -Dm644 examples/server.json-example "$CONFIGPATH"
     else
         install -Dm644 example/server.json "$CONFIGPATH"
     fi
 else
-    echo Skipping installing $NAME server config...
+    echo Omitir la instalación $NAME server config...
 fi
 
 if [[ -d "$SYSTEMDPREFIX" ]]; then
-    echo Installing $NAME systemd service to $SYSTEMDPATH...
+    echo Instalando $NAME servicio systemd a $SYSTEMDPATH...
     [[ $TYPE == 1 ]] && { NAME="trojan-go"; FLAG="-config"; }
     cat > "$SYSTEMDPATH" << EOF
 [Unit]
@@ -110,11 +110,11 @@ RestartSec=3s
 [Install]
 WantedBy=multi-user.target
 EOF
-    echo Reloading systemd daemon...
+    echo Recargando daemon systemd...
     systemctl daemon-reload
 fi
 
-echo Deleting temp directory $TMPDIR...
+echo Eliminando directorio temporal $TMPDIR...
 rm -rf "$TMPDIR"
 
-echo Done!
+echo Hecho!
