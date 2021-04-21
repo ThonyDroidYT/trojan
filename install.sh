@@ -152,7 +152,7 @@ installTrojan(){
         rm -f /usr/local/bin/trojan
     fi
     LASTEST_VERSION=$(curl -H 'Cache-Control: no-cache' -s "$VERSION_CHECK" | grep 'tag_name' | cut -d\" -f4)
-    echo "Descarga del programa de gestión`colorEcho $BLUE $LASTEST_VERSION`versión..."
+    echo "Descarga del programa de gestión versión: `colorEcho $BLUE $LASTEST_VERSION`..."
     curl -L "$DOWNLAOD_URL/$LASTEST_VERSION/trojan" -o /usr/local/bin/trojan
     chmod +x /usr/local/bin/trojan
     if [[ ! -e /etc/systemd/system/trojan-web.service ]];then
