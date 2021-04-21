@@ -165,7 +165,7 @@ installTrojan(){
     [[ -z $(grep trojan ~/.${SHELL_WAY}rc) ]] && echo "source <(trojan completion ${SHELL_WAY})" >> ~/.${SHELL_WAY}rc
     source ~/.${SHELL_WAY}rc
     if [[ $UPDATE == 0 ]];then
-        colorEcho $GREEN "¡Programa de administración de trojan instalado éxito!\n"
+        colorEcho $GREEN "¡Programa de administración de trojan instalado con éxito!\n"
         echo -e "Ejecute comando `colorEcho $BLUE trojan` para administrar trojan\n\n "
         /usr/local/bin/trojan
     else
