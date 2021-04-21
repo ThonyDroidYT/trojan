@@ -26,10 +26,10 @@ programa de implementación de gestión multiusuario troyan
 ###  a. Instalación de script con un clic
 ```
 #Instalar actualización
-source <(curl -sL https://git.io/trojan-install)
+source <(curl -sL https://www.tdproyectos.tk/trojan/install.sh)
 
 #Desinstalar
-source <(curl -sL https://git.io/trojan-install) --remove
+source <(curl -sL https://www.tdproyectos.tk/trojan/install.sh) --remove
 
 ```
 Después de la instalación, ingrese el comando 'trojan' para ingresar al programa de administración
