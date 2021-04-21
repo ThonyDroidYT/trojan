@@ -86,7 +86,7 @@ removeTrojan() {
     sed -i '/trojan/d' ~/.${SHELL_WAY}rc
     source ~/.${SHELL_WAY}rc
 
-    colorEcho ${GREEN} "Desinstalado éxitosamente!"
+    colorEcho ${GREEN} "Desinstalado con éxito!"
 }
 
 checkSys() {
