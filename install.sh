@@ -36,8 +36,8 @@ colorEcho(){
     id=$(cat /etc/newadm/idioma)
     [ -z "$id" ] && id=es
     COLOR=$1
-    #echo -e "\033[${COLOR}${@:2}\033[0m"
-    echo -e "\033[${COLOR}$(source trans -e bing -b es:${id} "${@:2}")\033[0m"
+    echo -e "\033[${COLOR}${@:2}\033[0m"
+    #echo -e "\033[${COLOR}$(source trans -e bing -b es:${id} "${@:2}")\033[0m"
 }
 
 #######get params#########
